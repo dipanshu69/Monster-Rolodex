@@ -1,4 +1,6 @@
 import { Component } from "react";
+import CardList from "./components/card-list/card-list.component";
+import SearchBox from "./components/search-box/search-box.component";
 import "./App.css";
 
 class App extends Component {
@@ -14,14 +16,9 @@ class App extends Component {
     fetch("https://jsonplaceholder.typicode.com/users")
       .then((response) => response.json())
       .then((users) =>
-        this.setState(
-          () => {
-            return { monsters: users };
-          },
-          () => {
-            console.log(this.state.monsters);
-          }
-        )
+        this.setState(() => {
+          return { monsters: users };
+        })
       );
   }
 
@@ -30,12 +27,11 @@ class App extends Component {
     this.setState(() => {
       return { searchTerm: searchTerm };
     });
-  }
+  };
 
   render() {
-
-    const {monsters, searchTerm} = this.state;
-    const {onSearchChange} = this;
+    const { monsters, searchTerm } = this.state;
+    const { onSearchChange } = this;
 
     const filterMonsters = monsters.filter((monster) =>
       monster.name.toLowerCase().includes(searchTerm)
@@ -43,22 +39,16 @@ class App extends Component {
 
     return (
       <div className="App">
-        <input
-          className="search-box"
-          type="search"
-          placeholder="Search Monster"
-          onChange={onSearchChange}
-        />
-        {filterMonsters.map((monster, index) => {
-          return <h1 key={index}>{monster.name}</h1>;
-        })}
+        <h1 className="app-title">Monster Rolodex</h1>
 
+        <SearchBox
+          onChangeHandler={onSearchChange}
+          placeHolder="Search Monster"
+        />
+        <CardList monsters={filterMonsters} />
       </div>
     );
   }
 }
 
 export default App;
-
-
-
